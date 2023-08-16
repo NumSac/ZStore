@@ -1,25 +1,30 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ZStore.Application.Models;
 
 namespace ZStore.Application.Helpers
 {
     public class TokenService : ITokenService
     {
-        private const int ExpirationInMinutes = 90;
+        private readonly JwtOptions _jwtOptions;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public TokenService(UserManager<IdentityUser> userManager)
+        public TokenService(IOptions<JwtOptions> options, 
+            UserManager<IdentityUser> userManager
+            )
         {
+            _jwtOptions = options.Value;
             _userManager = userManager;
         }
 
         public async Task<string> CreateToken(IdentityUser user)
         {
-            var expiration = DateTime.UtcNow.AddMinutes(ExpirationInMinutes);
+            var expiration = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiryMinutes);
             var token = CreateJwtToken(
                 await CreateClaims(user),
                 CreateSigningCredentials(),

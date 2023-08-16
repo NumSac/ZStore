@@ -39,7 +39,9 @@ namespace ZStore.Application.Features
         public async Task<Response<string>> RegisterCompany(RegisterCompanyRequest request)
         {
             // Check if some data is already present in db
-            var companyAlreadyRegistered = await _unitOfWork.Company.GetAsync(c => c.VatNumber == request.VatNumber);
+            var companyAlreadyRegistered = await _unitOfWork.Company.GetOneAsync(c => 
+                c.VatNumber == request.VatNumber
+            );
             if (companyAlreadyRegistered != null)
                 throw new ApiException($"A company with this Vat number is already registered");
 
@@ -50,6 +52,7 @@ namespace ZStore.Application.Features
             var companyToRegister = new Company
             {
                 Name = request.CompanyAlias,
+                CompanyEmail = request.CompanyEmail,
                 StreetAddress = request.StreetAddress,
                 City = request.City,
                 State = request.State,
@@ -65,14 +68,16 @@ namespace ZStore.Application.Features
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                UserName = request.UserName,
                 Email = request.UserEmail,
                 CompanyId = registeredCompany.Id,
+                Company = registeredCompany,
             };
 
             var result = await _userManager.CreateAsync(userToRegister, request.Password);
             if (!result.Succeeded)
                 throw new ApiException(
-                    $"Errors on register '{result.Errors.Select(error => error.Description)}'"
+                    $"Errors on register '{string.Join(",", result.Errors.Select(e => e.Description))}'"
                 );
             // add Roles to created user
             await _userManager.AddToRoleAsync(userToRegister, SD.Role_User);

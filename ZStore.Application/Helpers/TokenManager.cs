@@ -21,13 +21,18 @@ namespace ZStore.Application.Helpers
             _jwtOptions = jwtOptions;
         }
 
-        public async Task<bool> IsCurrentActiveToken() => await IsActiveAsync(GetCurrentAsync());
+        public async Task<bool> IsCurrentActiveToken() =>
+            await IsActiveAsync(GetCurrentAsync());
 
-        public async Task DeactivateCurrentAsync() => await DeactivateAsync(GetCurrentAsync());
+        public async Task DeactivateCurrentAsync() => 
+            await DeactivateAsync(GetCurrentAsync());
 
-        public async Task<bool> IsActiveAsync(string token) => await _cache.GetStringAsync(GetKey(token)) == null;
-        public async Task DeactivateAsync(string token) => await _cache.SetStringAsync(GetKey(token), " ", new DistributedCacheEntryOptions
-        {
+        public async Task<bool> IsActiveAsync(string token) => 
+            await _cache.GetStringAsync(GetKey(token)) == null;
+
+        public async Task DeactivateAsync(string token) => await _cache.SetStringAsync(GetKey(token), " ", 
+            new DistributedCacheEntryOptions 
+            {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_jwtOptions.Value.ExpiryMinutes)
         });
 

@@ -239,6 +239,15 @@ namespace ZStore.WebApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanyEmail")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
@@ -252,20 +261,62 @@ namespace ZStore.WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VatNumber")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfileId");
+
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("ZStore.Domain.Models.CompanyProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CompanyBackgroundImage")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanyDescription")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanyLogoImage")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanyProfiles");
                 });
 
             modelBuilder.Entity("ZStore.Domain.Models.Product", b =>
@@ -275,6 +326,9 @@ namespace ZStore.WebApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
@@ -290,6 +344,9 @@ namespace ZStore.WebApi.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("ProductDetailId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -298,7 +355,28 @@ namespace ZStore.WebApi.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ProductDetailId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("ZStore.Domain.Models.ProductDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SoldItems")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalItems")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductDetails");
                 });
 
             modelBuilder.Entity("ZStore.Domain.Models.ProductImage", b =>
@@ -328,7 +406,7 @@ namespace ZStore.WebApi.Migrations
                     b.Property<string>("City")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Country")
@@ -347,6 +425,8 @@ namespace ZStore.WebApi.Migrations
 
                     b.Property<string>("StreetAddress")
                         .HasColumnType("TEXT");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -402,6 +482,17 @@ namespace ZStore.WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ZStore.Domain.Models.Company", b =>
+                {
+                    b.HasOne("ZStore.Domain.Models.CompanyProfile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profile");
+                });
+
             modelBuilder.Entity("ZStore.Domain.Models.Product", b =>
                 {
                     b.HasOne("ZStore.Domain.Models.Category", "Category")
@@ -410,7 +501,19 @@ namespace ZStore.WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ZStore.Domain.Models.Company", null)
+                        .WithMany("Products")
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("ZStore.Domain.Models.ProductDetail", "ProductDetail")
+                        .WithMany()
+                        .HasForeignKey("ProductDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("ProductDetail");
                 });
 
             modelBuilder.Entity("ZStore.Domain.Models.ProductImage", b =>
@@ -422,6 +525,20 @@ namespace ZStore.WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ZStore.Domain.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("ZStore.Domain.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("ZStore.Domain.Models.Company", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ZStore.Domain.Models.Product", b =>

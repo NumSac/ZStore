@@ -37,5 +37,6 @@ namespace ZStore.Infrastructure.Repository.IRepository
         Task<int> CountAsync(Expression<Func<TEntity, bool>> filter);
 
         Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter);
+        Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> filter, string? includeProperties = null, bool tracked = false);
     }
 }

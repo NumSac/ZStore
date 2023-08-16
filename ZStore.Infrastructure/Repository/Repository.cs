@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.Repository.IRepository;
@@ -19,6 +20,33 @@ namespace ZStore.Infrastructure.Repository
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
+        }
+        public async Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> filter, 
+            string? includeProperties = null, 
+            bool tracked = false
+            )
+        {
+            IQueryable<TEntity> query;
+            if (tracked)
+            {
+                query = _dbSet;
+
+            }
+            else
+            {
+                query = _dbSet.AsNoTracking();
+            }
+
+            query = query.Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter)

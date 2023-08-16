@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ZStore.Infrastructure\ZStore.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Transactions\" />
+  </ItemGroup>
+
 </Project>

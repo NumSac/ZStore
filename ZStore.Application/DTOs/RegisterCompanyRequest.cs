@@ -16,6 +16,8 @@ namespace ZStore.Application.DTOs
         [Required]
         public string LastName { get; set; } = string.Empty;
         [Required]
+        public string UserName { get; set; } = string.Empty;
+        [Required]
         public string CompanyAlias { get; set; } = string.Empty;
         [Required]
         [EmailAddress]

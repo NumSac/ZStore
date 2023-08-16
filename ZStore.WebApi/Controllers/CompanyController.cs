@@ -27,7 +27,7 @@ namespace ZStore.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterCompany([FromBody] RegisterCompanyRequest request)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(await _companyService.RegisterCompany(request));
            }
@@ -35,7 +35,7 @@ namespace ZStore.WebApi.Controllers
         [Authorize(Roles = SD.Role_Company)]
         public async Task<IActionResult> EditCompany([FromBody] EditCompanyRequest request)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(await _companyService.EditCompany(0, request));
         }
