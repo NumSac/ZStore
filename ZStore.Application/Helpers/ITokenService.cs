@@ -7,6 +7,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using ZStore.Domain.Common;
+using ZStore.Domain.Models;
 
 namespace ZStore.Application.Helpers
 {
@@ -14,6 +16,6 @@ namespace ZStore.Application.Helpers
     {
         JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials credentials, DateTime expiration);
         SigningCredentials CreateSigningCredentials();
-        Task<string> CreateToken(IdentityUser user);
+        Task<string> CreateToken(AccountBaseEntity user);
     }
 }

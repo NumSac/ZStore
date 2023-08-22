@@ -12,6 +12,7 @@ using ZStore.Infrastructure.Repository;
 using ZStore.WebApi.Util;
 using Microsoft.OpenApi.Models;
 using ZStore.WebApi.Middleware;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ZStore.WebApi
 {
@@ -34,6 +35,12 @@ namespace ZStore.WebApi
                         b => b.MigrationsAssembly("ZStore.WebApi")
                     )
             );
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["RedisConnectionSettings:ConnectionString"];
+                options.InstanceName = "Samite_";
+            });
 
             services.AddIdentityCore<IdentityUser>(options =>
             {

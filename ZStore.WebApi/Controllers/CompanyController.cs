@@ -39,10 +39,5 @@ namespace ZStore.WebApi.Controllers
                 return BadRequest(ModelState);
             return Ok(await _companyService.EditCompany(0, request));
         }
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
     }
 }

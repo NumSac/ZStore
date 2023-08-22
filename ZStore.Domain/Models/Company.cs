@@ -3,7 +3,7 @@ using ZStore.Domain.Common;
 
 namespace ZStore.Domain.Models
 {
-    public class Company : AuditibleBaseEntity
+    public class Company : AuditableBaseEntity
     {
         [Required]
         public string Name { get; set; } = string.Empty;
@@ -20,8 +20,6 @@ namespace ZStore.Domain.Models
         public string PostalCode { get; set; } = string.Empty;
         [Required] 
         public string Country { get; set; } = string.Empty;
-        [Required]
-        public string PhoneNumber { get; set; } = string.Empty;
         [Required]
         public string VatNumber { get; set; } = string.Empty;
         public CompanyProfile Profile { get; set; } = new CompanyProfile();

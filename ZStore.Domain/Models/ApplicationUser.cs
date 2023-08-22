@@ -1,24 +1,30 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ZStore.Domain.Common;
 
 namespace ZStore.Domain.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : AccountBaseEntity
     {
         [Required]
-        public string FirstName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         [Required]
-        public string LastName { get; set; } = string.Empty;
-        public string? StreetAddress { get; set; }
-        public string? City { get; set; }
-        public string? PostalCode { get; set; }
-        public string? Country { get; set; }
+        public string StreetAddress { get; set; } = string.Empty;
+        [Required]
+        public string City { get; set; } = string.Empty;
+        [Required]
+        public string State { get; set; } = string.Empty;
+        [Required]
+        public string PostalCode { get; set; } = string.Empty;
+        [Required] 
+        public string Country { get; set; } = string.Empty;
+        [Required]
+        public string VatNumber { get; set; } = string.Empty;
         public int? CompanyId { get; set; }
-        [ForeignKey("CompanyId")]
+        [ForeignKey(nameof(CompanyId))]
         public Company? Company { get; set; }
         [NotMapped]
-        public string Role { get; set; } = "";
+        public string Role = string.Empty;
     }
 }

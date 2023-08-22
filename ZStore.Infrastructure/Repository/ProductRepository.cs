@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,13 @@ namespace ZStore.Infrastructure.Repository
         { 
             _context = context;
         }  
+
+        public async Task<List<Product>> GetProductsByCategoryAsync(string categoryName)
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.Category.Name == categoryName)
+                .ToListAsync();
+        }
     }
 }

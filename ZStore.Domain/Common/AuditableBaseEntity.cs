@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZStore.Domain.Common
 {
-    public class AuditibleBaseEntity
+    public class AuditableBaseEntity
     {
         public virtual int Id { get; set; }
         public DateTime Created { get; set; }

@@ -109,13 +109,6 @@ namespace ZStore.Infrastructure.Repository
         {
             _dbSet.Update(entity);
         }
-
-        public void Delete(object id)
-        {
-            TEntity entityToDelete = _dbSet.Find(id);
-            Delete(entityToDelete);
-        }
-
         public void Delete(TEntity entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
@@ -123,6 +116,11 @@ namespace ZStore.Infrastructure.Repository
                 _dbSet.Attach(entity);
             }
             _dbSet.Remove(entity);
+        }
+
+        public void DeleteRange(IEnumerable<TEntity> entities)
+        {
+            _dbSet.RemoveRange(entities);
         }
 
         public async Task<int> CountAsync()
@@ -138,6 +136,65 @@ namespace ZStore.Infrastructure.Repository
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter)
         {
             return await _dbSet.AnyAsync(filter);
+        }
+
+        public void Add(TEntity entity)
+        {
+            _dbSet.Add(entity);
+        }
+
+        public TEntity? Get(Expression<Func<TEntity, bool>> filter, string? includeProperties = null, bool tracked = false)
+        {
+            IQueryable<TEntity> query;
+            if (tracked)
+            {
+                query = _dbSet;
+
+            }
+            else
+            {
+                query = _dbSet.AsNoTracking();
+            }
+
+            query = query.Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.FirstOrDefault();
+
+        }
+
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, string? includeProperties = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.ToList();
+        }
+
+        public void Remove(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public void RemoveRange(IEnumerable<TEntity> entity)
+        {
+            _dbSet.RemoveRange(entity);
         }
     }
 }

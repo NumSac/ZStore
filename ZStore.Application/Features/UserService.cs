@@ -2,7 +2,7 @@
 using ZStore.Application.DTOs;
 using ZStore.Application.Helpers;
 using ZStore.Domain.Exceptions;
-using ZStore.Domain.Models;
+using ZStore.Domain.Common;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
@@ -10,14 +10,14 @@ namespace ZStore.Application.Features
 {
     public class UserService : IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AccountBaseEntity> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<AccountBaseEntity> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(UserManager<IdentityUser> userManager,
-             RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManger,
+        public UserService(UserManager<AccountBaseEntity> userManager,
+             RoleManager<IdentityRole> roleManager, SignInManager<AccountBaseEntity> signInManger,
             ITokenService tokenService, IUnitOfWork unitOfWork
             )
         {
@@ -69,12 +69,10 @@ namespace ZStore.Application.Features
             if (userWithSameName != null)
                 throw new ApiException($"Username '{request.UserName}' is already taken");
 
-            var user = new ApplicationUser
+            var user = new AccountBaseEntity
             {
                 UserName = request.UserName,
                 Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -95,10 +93,6 @@ namespace ZStore.Application.Features
                 throw new ApiException($"User with Id '{id}' not found");
 
             userToUpdate.UserName = request.UserName;
-            userToUpdate.StreetAddress = request.StreetAddress;
-            userToUpdate.City = request.City;
-            userToUpdate.PostalCode = request.PostalCode;
-            userToUpdate.Country = request.Country;
             userToUpdate.Email = request.Email;
             userToUpdate.PhoneNumber = request.PhoneNumber;
             
@@ -121,6 +115,19 @@ namespace ZStore.Application.Features
                 throw new ApiException($"Unable to update password");
 
             return new Response<string>("Password updated");
+        }
+
+        public async Task<Response<string>> DeleteUser(string id)
+        {
+            var userToDelete = await _unitOfWork.ApplicationUser.GetOneAsync(u => u.Id == id);
+            if (userToDelete == null)
+                throw new ApiException($"User does not exits");
+
+            _unitOfWork.ApplicationUser.Delete(userToDelete);
+
+            await _unitOfWork.SaveAsync();
+
+            return new Response<string>("User deleted");
         }
     }
 }

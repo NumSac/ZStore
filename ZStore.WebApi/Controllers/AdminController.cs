@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using ZStore.Application.Features;
 using ZStore.Domain.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,36 +13,29 @@ namespace ZStore.WebApi.Controllers
     [Authorize(Roles = SD.Role_Admin)]
     public class AdminController : ControllerBase
     {
-        // GET: api/<AdminController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IAdminService _adminService;
+        public AdminController(IAdminService adminService) 
         {
-            return new string[] { "value1", "value2" };
+            _adminService = adminService;
         }
 
-        // GET api/<AdminController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("Users")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            return "value";
+            return Ok(await _adminService.GetAllCustomerUsers());
         }
 
-        // POST api/<AdminController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpGet("Companies")]
+        public async Task<IActionResult> GetAllCompanyUsers()
         {
-        }
-
-        // PUT api/<AdminController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            return Ok(await _adminService.GetAllCompanyUsers());
         }
 
         // DELETE api/<AdminController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCompanyUsers([FromBody] IEnumerable<string> toDelete)
         {
+            return Ok(await _adminService.DeleteCompanyUsers(toDelete));
         }
     }
 }

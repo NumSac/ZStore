@@ -1,4 +1,5 @@
-﻿using ZStore.Infrastructure.Data;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Infrastructure.Repository
@@ -6,6 +7,7 @@ namespace ZStore.Infrastructure.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
+        private IDbContextTransaction _transaction;
         public IApplicationUserRepository ApplicationUser { get; private set; }
 
         public ICompanyRepository Company { get; private set; }
@@ -29,6 +31,30 @@ namespace ZStore.Infrastructure.Repository
             Category = new CategoryRepository(_context);
             CompanyProfile = new CompanyProfileRepository(_context);
             ProductDetail = new ProductDetailRepository(_context);
+        }
+
+        public IDbContextTransaction BeginTransaction ()
+        {
+            _transaction = _context.Database.BeginTransaction();
+            return _transaction;
+        }
+
+        public void CommitTransaction()
+        {
+            _transaction.Commit();
+            _transaction.Dispose();
+        }
+
+        public void Rollback()
+        {
+            _transaction.Rollback();
+            _transaction.Dispose();
+        }
+
+        public void Dispose()
+        {
+            _transaction?.Dispose();
+            _context.Dispose();
         }
 
         public async Task SaveAsync()

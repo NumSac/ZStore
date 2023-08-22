@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ZStore.Domain.Common;
 using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Data;
@@ -8,12 +9,12 @@ namespace ZStore.Infrastructure.DbInitializer
 {
     public class DbInitializer : IDbInitializer
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AccountBaseEntity> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
 
         public DbInitializer(
-            UserManager<IdentityUser> userManager,
+            UserManager<AccountBaseEntity> userManager,
             RoleManager<IdentityRole> roleManager,
             ApplicationDbContext context
         )
@@ -57,12 +58,12 @@ namespace ZStore.Infrastructure.DbInitializer
                         {
                             UserName = "admin@dotnetmastery.com",
                             Email = "admin@dotnetmastery.com",
-                            FirstName = "Zacharias",
-                            LastName = "Dohmann",
+                            //FirstName = "Zacharias",
+                            //LastName = "Dohmann",
                             PhoneNumber = "1112223333",
-                            StreetAddress = "test 123 Ave",
-                            PostalCode = "23422",
-                            City = "Chicago"
+                            //StreetAddress = "test 123 Ave",
+                            //PostalCode = "23422",
+                            //City = "Chicago"
                         },
                         "Admin123*"
                     )
@@ -73,6 +74,27 @@ namespace ZStore.Infrastructure.DbInitializer
                     u => u.Email == "admin@dotnetmastery.com"
                 );
                 _userManager.AddToRoleAsync(user!, SD.Role_Admin).GetAwaiter().GetResult();
+                _userManager.AddToRoleAsync(user!, SD.Role_Company).GetAwaiter().GetResult();
+                _userManager.AddToRoleAsync(user!, SD.Role_User).GetAwaiter().GetResult();
+            }
+
+            SeedCategories();
+        }
+
+        private void SeedCategories()
+        {
+            if (!_context.Categories.Any())
+            {
+                var categories = new List<Category>
+            {
+                new Category { Name = "Electronics" },
+                new Category { Name = "Clothing" },
+                new Category { Name = "Furniture" },
+                // Add more categories as needed
+            };
+
+                _context.Categories.AddRange(categories);
+                _context.SaveChanges();
             }
         }
     }
