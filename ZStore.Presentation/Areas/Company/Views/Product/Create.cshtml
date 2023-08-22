@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ProductVM
 
 @{
     ViewData["Title"] = "Create Product";
@@ -29,11 +29,12 @@
         <label for="CategoryId">Category</label>
         <select class="form-control" id="CategoryId" name="CategoryId">
             <option value="">Select a category</option>
-            @foreach (var category in ViewBag.Categories)
+            @foreach (var category in Model.Categories)
             {
                 <option value="@category.Id">@category.Name</option>
             }
         </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Create</button>

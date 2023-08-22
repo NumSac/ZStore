@@ -94,10 +94,9 @@ namespace ZStore.Infrastructure.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<TEntity> InsertAsync(TEntity entity)
+        public async Task InsertAsync(TEntity entity)
         {
-            var insertedEntity = await _dbSet.AddAsync(entity);
-            return insertedEntity.Entity;
+            await _dbSet.AddAsync(entity);
         }
 
         public async Task InsertRangeAsync(IEnumerable<TEntity> entities)

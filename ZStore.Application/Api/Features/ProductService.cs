@@ -4,12 +4,12 @@ using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
-namespace ZStore.Application.Features
+namespace ZStore.Application.Api.Features
 {
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductService(IUnitOfWork unitOfWork) 
+        public ProductService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -61,7 +61,7 @@ namespace ZStore.Application.Features
         public async Task<Response<string>> EditProduct(int id)
         {
             throw new NotImplementedException();
-    
+
         }
     }
 }

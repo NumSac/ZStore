@@ -7,7 +7,7 @@ using ZStore.Application.DTOs;
 using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 
-namespace ZStore.Application.Features
+namespace ZStore.Application.Api.Features
 {
     public interface IProductService
     {

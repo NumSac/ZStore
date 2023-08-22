@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ZStore.Application.DTOs;
 using ZStore.Application.Helpers;
-using ZStore.Domain.Exceptions;
 using ZStore.Domain.Common;
+using ZStore.Domain.Exceptions;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
-namespace ZStore.Application.Features
+namespace ZStore.Application.Api.Features
 {
-    public class UserService : IUserService
+    public class AccountService : IAccountService
     {
         private readonly UserManager<AccountBaseEntity> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -16,7 +16,7 @@ namespace ZStore.Application.Features
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(UserManager<AccountBaseEntity> userManager,
+        public AccountService(UserManager<AccountBaseEntity> userManager,
              RoleManager<IdentityRole> roleManager, SignInManager<AccountBaseEntity> signInManger,
             ITokenService tokenService, IUnitOfWork unitOfWork
             )
@@ -95,7 +95,11 @@ namespace ZStore.Application.Features
             userToUpdate.UserName = request.UserName;
             userToUpdate.Email = request.Email;
             userToUpdate.PhoneNumber = request.PhoneNumber;
-            
+            userToUpdate.StreetAddress = request.StreetAddress;
+            userToUpdate.City = request.City;
+            userToUpdate.PostalCode = request.PostalCode;
+            userToUpdate.Country = request.Country;
+
 
             _unitOfWork.ApplicationUser.Update(userToUpdate);
 

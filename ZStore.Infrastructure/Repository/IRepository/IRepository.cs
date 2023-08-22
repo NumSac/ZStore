@@ -26,7 +26,7 @@ namespace ZStore.Infrastructure.Repository.IRepository
 
         Task<TEntity?> GetByIdAsync(object id);
 
-        Task<TEntity> InsertAsync(TEntity entity);
+        Task InsertAsync(TEntity entity);
 
         Task InsertRangeAsync(IEnumerable<TEntity> entities);
 

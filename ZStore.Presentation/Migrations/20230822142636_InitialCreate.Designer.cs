@@ -11,8 +11,8 @@ using ZStore.Infrastructure.Data;
 namespace ZStore.Presentation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230821153018_smallChangesToProducts")]
-    partial class smallChangesToProducts
+    [Migration("20230822142636_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -284,10 +284,6 @@ namespace ZStore.Presentation.Migrations
 
                     b.Property<int>("ProductDetailId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()

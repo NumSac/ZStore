@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ZStore.Application.Features;
 using ZStore.Application.Helpers;
 using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.DbInitializer;
@@ -17,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
+using ZStore.Application.Api.Features;
 
 namespace ZStore.WebApi
 {
@@ -63,6 +63,7 @@ namespace ZStore.WebApi
                 options.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
 

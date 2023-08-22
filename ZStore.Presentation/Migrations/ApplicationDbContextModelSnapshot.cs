@@ -279,12 +279,8 @@ namespace ZStore.Presentation.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int?>("ProductDetailId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -405,9 +401,7 @@ namespace ZStore.Presentation.Migrations
 
                     b.HasOne("ZStore.Domain.Models.ProductDetail", "ProductDetail")
                         .WithMany()
-                        .HasForeignKey("ProductDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductDetailId");
 
                     b.Navigation("Category");
 

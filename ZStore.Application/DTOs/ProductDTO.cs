@@ -13,7 +13,7 @@ namespace ZStore.Application.DTOs
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
-        public ProductDetail ProductDetail { get; set; } = new ProductDetail();
+        //public ProductDetail ProductDetail { get; set; } = new ProductDetail();
         //public ICollection<string> ImageUrls { get; set; } = new List<string>();
     }
 }

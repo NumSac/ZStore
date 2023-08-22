@@ -5,16 +5,17 @@ using ZStore.Application.Api.Features;
 using ZStore.Application.DTOs;
 using ZStore.Domain.Exceptions;
 
-namespace ZStore.WebApi.Controllers
+namespace ZStore.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class AccountController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UserController(IUserService userService) 
-        { 
-            _userService = userService;
+        private readonly IAccountService _accountService;
+
+        public AccountController(IAccountService accountService)
+        {
+            _accountService = accountService;
         }
 
         [HttpPost("Login")]
@@ -22,7 +23,7 @@ namespace ZStore.WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(await _userService.AuthenticateAsync(request));
+            return Ok(await _accountService.AuthenticateAsync(request));
         }
 
         [HttpPost("Register")]
@@ -30,7 +31,7 @@ namespace ZStore.WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(await _userService.RegisterAsync(request));   
+            return Ok(await _accountService.RegisterAsync(request));
         }
 
         [HttpPut("UpdateUser")]
@@ -38,7 +39,7 @@ namespace ZStore.WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(await _userService.UpdateUserInfo(GetNameIdentifierFromClaimsPrincipal(User), request));
+            return Ok(await _accountService.UpdateUserInfo(GetNameIdentifierFromClaimsPrincipal(User), request));
         }
 
         [HttpPost("UpdatePassword")]
@@ -46,7 +47,7 @@ namespace ZStore.WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(await _userService.UpdatePassword(GetNameIdentifierFromClaimsPrincipal(User), request));
+            return Ok(await _accountService.UpdatePassword(GetNameIdentifierFromClaimsPrincipal(User), request));
         }
 
         private static string GetNameIdentifierFromClaimsPrincipal(ClaimsPrincipal claimsPrincipal)

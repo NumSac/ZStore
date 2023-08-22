@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ZStore.Domain.Common;
 using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
+using ZStore.Domain.ViewModels;
 using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Presentation.Areas.Company.Controllers
@@ -22,7 +23,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
             _unitOfWork = unitOfWork;
             _userManager = userManager;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             // Check if the current company owns the product
@@ -39,48 +40,50 @@ namespace ZStore.Presentation.Areas.Company.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var categories = await _unitOfWork.Category.GetAllAsync();
-            ViewBag.Categories = categories;
+            var companyUser = await _userManager.GetUserAsync(User);
+            if (companyUser == null)
+                return Forbid();
 
-            return View();
+            var categories = await _unitOfWork.Category.GetAllAsync();
+            var productVM = new ProductVM
+            {
+                CompanyId = companyUser.Id,
+                Categories = categories.ToList(),
+            };
+            ViewBag.Categories = categories.ToList();
+
+            return View(productVM);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] Product product)
+        public async Task<IActionResult> Create(ProductVM productVM)
         {
             if (ModelState.IsValid)
             {
-                Console.WriteLine(product);
+                Console.WriteLine("reached");
                 var companyUser = await _userManager.GetUserAsync(User);
                 if (companyUser == null)
                     return Forbid();
 
                 var productToSave = new Product
                 {
-                    Title = product.Title,
-                    Description = product.Description,
-                    Price = product.Price,
-                    ProductDetail = new ProductDetail(),
-                    ProductImages = new List<ProductImage>(),
-                    CategoryId = product.CategoryId,
-                    CompanyId = companyUser.Id
+                    Title = productVM.Title,
+                    Description = productVM.Description,
+                    Price = productVM.Price,
+                    CategoryId = productVM.CategoryId,
+                    CompanyId = companyUser.Id,
                 };
-
 
                 await _unitOfWork.Product.InsertAsync(productToSave);
                 await _unitOfWork.SaveAsync();
 
                 return RedirectToAction(nameof(Index));
-            }
-            Console.WriteLine("Something went wrong");
-            // ModelState is invalid, return the view with validation errors
-            var categories = await _unitOfWork.Category.GetAllAsync();
-            ViewBag.Categories = categories;
+            } 
+            // If ModelState is not valid, populate the Categories dropdown again
+            productVM.Categories = _unitOfWork.Category.GetAll().ToList();
 
-            return View(product);
+            return View(productVM);
         }
-
         public async Task<IActionResult> Details(string id)
         {
             if (string.IsNullOrEmpty(id))
