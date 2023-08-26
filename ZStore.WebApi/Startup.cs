@@ -82,8 +82,8 @@ namespace ZStore.WebApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<RetrieveCompany>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(option =>

@@ -11,11 +11,11 @@ namespace ZStore.Domain.ViewModels
 {
     public class ProductVM
     {
-
+        public int ProductId { get; set; }
         [Required(ErrorMessage = "Title is required.")]
-        public string Title { get; set; }
-
-        public string Description { get; set; }
+        public string Title { get; set; } = "";
+        [Required(ErrorMessage = "Description is required.")]
+        public string Description { get; set; } = "";
 
         [Required(ErrorMessage = "Price is required.")]
         [Range(1, 1000, ErrorMessage = "Price must be between 1 and 1000.")]
@@ -26,7 +26,7 @@ namespace ZStore.Domain.ViewModels
         [ValidateNever]
         public string CompanyId { get; set; }
         [ValidateNever]
-        public List<Category> Categories { get; set; }
+        public List<CategoryVM> Categories { get; set; }
     }
 
     public class CategoryVM

@@ -11,7 +11,6 @@ namespace ZStore.Application.Api.Features
 {
     public interface IProductService
     {
-        Task<Response<string>> EditProduct(int id);
         Task<Response<List<ProductDTO>>> GetAllProducts();
         Task<Response<ProductDTO>> GetProductbyId(int id);
         Task<Response<List<Product>>> GetProductsByCategory(string categoryName);

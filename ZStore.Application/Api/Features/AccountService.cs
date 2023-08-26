@@ -88,22 +88,33 @@ namespace ZStore.Application.Api.Features
 
         public async Task<Response<string>> UpdateUserInfo(string id, UpdateUserRequest request)
         {
-            var userToUpdate = await _unitOfWork.ApplicationUser.GetByIdAsync(id);
-            if (userToUpdate == null)
-                throw new ApiException($"User with Id '{id}' not found");
-
-            userToUpdate.UserName = request.UserName;
-            userToUpdate.Email = request.Email;
-            userToUpdate.PhoneNumber = request.PhoneNumber;
-            userToUpdate.StreetAddress = request.StreetAddress;
-            userToUpdate.City = request.City;
-            userToUpdate.PostalCode = request.PostalCode;
-            userToUpdate.Country = request.Country;
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    var userToUpdate = await _unitOfWork.ApplicationUser.GetByIdAsync(id) 
+                        ?? throw new ApiException($"User with Id '{id}' not found");
 
 
-            _unitOfWork.ApplicationUser.Update(userToUpdate);
+                    userToUpdate.UserName = request.UserName;
+                    userToUpdate.Email = request.Email;
+                    userToUpdate.PhoneNumber = request.PhoneNumber;
+                    userToUpdate.StreetAddress = request.StreetAddress;
+                    userToUpdate.City = request.City;
+                    userToUpdate.PostalCode = request.PostalCode;
+                    userToUpdate.Country = request.Country;
 
-            await _unitOfWork.SaveAsync();
+                    _unitOfWork.ApplicationUser.Update(userToUpdate);
+
+                    await _unitOfWork.SaveAsync();
+
+                    await transaction.CommitAsync();
+                } catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new ApiException(ex.Message);
+                }
+            }
 
             return new Response<string>("User updated");
         }

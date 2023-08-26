@@ -16,7 +16,7 @@ namespace ZStore.Application.Api.Features
 
         public async Task<Response<List<ProductDTO>>> GetAllProducts()
         {
-            var result = await _unitOfWork.Product.GetAllAsync();
+            var result = _unitOfWork.Product.GetAll(includeProperties: "Category");
 
             var transformedResult = result.Select(p => new ProductDTO
             {
@@ -24,7 +24,6 @@ namespace ZStore.Application.Api.Features
                 Title = p.Title,
                 Description = p.Description,
                 Category = p.Category.Name,
-                ProductDetail = p.ProductDetail
             }).ToList();
 
             return new Response<List<ProductDTO>>(transformedResult);
@@ -42,7 +41,6 @@ namespace ZStore.Application.Api.Features
                 Title = result.Title,
                 Description = result.Description,
                 Category = result.Category.Name,
-                ProductDetail = result.ProductDetail,
             });
         }
 
@@ -56,12 +54,6 @@ namespace ZStore.Application.Api.Features
             }
 
             return new Response<List<Product>>(products, "Products retrieved successfully.");
-        }
-
-        public async Task<Response<string>> EditProduct(int id)
-        {
-            throw new NotImplementedException();
-
         }
     }
 }

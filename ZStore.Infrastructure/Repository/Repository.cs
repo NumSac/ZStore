@@ -168,7 +168,9 @@ namespace ZStore.Infrastructure.Repository
 
         }
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, string? includeProperties = null)
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, 
+            string? includeProperties = null
+            )
         {
             IQueryable<TEntity> query = _dbSet;
             if (filter != null)

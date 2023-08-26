@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ZStore.Application.Api.Features;
 using ZStore.Application.DTOs;
 using ZStore.Domain.Exceptions;
+using ZStore.Domain.Utils;
 
 namespace ZStore.Presentation.Controllers
 {
+    [Authorize(Roles = SD.Role_User)]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -19,6 +22,7 @@ namespace ZStore.Presentation.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthenticationRequest request)
         {
             if (!ModelState.IsValid)
@@ -27,6 +31,7 @@ namespace ZStore.Presentation.Controllers
         }
 
         [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (!ModelState.IsValid)

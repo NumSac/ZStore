@@ -126,7 +126,7 @@ namespace ZStore.WebApi
             services.AddScoped<ITokenService, TokenService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IProductService, ProductService>();
 
             services.AddEndpointsApiExplorer();
@@ -172,8 +172,8 @@ namespace ZStore.WebApi
         {
             if (env.IsDevelopment())
             {
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
 
