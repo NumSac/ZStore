@@ -45,5 +45,6 @@ namespace ZStore.Infrastructure.Repository.IRepository
         IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, string? includeProperties = null);
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entity);
+        Task<IReadOnlyList<TEntity>> GetPagedResponseAsync(int pageNumber, int pageSize);
     }
 }

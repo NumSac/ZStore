@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZStore.Application.Api.Account.Queries;
 using ZStore.Application.DTOs;
 using ZStore.Domain.Utils;
 
-namespace ZStore.Application.Api.Features
+namespace ZStore.Application.Api.Account.Service
 {
     public interface IAccountService
     {

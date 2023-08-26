@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZStore.Application.Api.Products.Queries;
 using ZStore.Application.DTOs;
 using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 
-namespace ZStore.Application.Api.Features
+namespace ZStore.Application.Api.Product.Service
 {
     public interface IProductService
     {
-        Task<Response<List<ProductDTO>>> GetAllProducts();
+        Task<PagedResponse<IEnumerable<ProductDTO>>> GetAllProducts(GetAllProductsQuery query);
         Task<Response<ProductDTO>> GetProductbyId(int id);
-        Task<Response<List<Product>>> GetProductsByCategory(string categoryName);
+        Task<PagedResponse<IEnumerable<ProductDTO>>> GetProductsByCategory(GetProductsByCategoryQuery query);
     }
 }

@@ -1,10 +1,11 @@
-﻿using ZStore.Application.DTOs;
+﻿using ZStore.Application.Api.Products.Queries;
+using ZStore.Application.DTOs;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
-namespace ZStore.Application.Api.Features
+namespace ZStore.Application.Api.Product.Service
 {
     public class ProductService : IProductService
     {
@@ -14,7 +15,7 @@ namespace ZStore.Application.Api.Features
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Response<List<ProductDTO>>> GetAllProducts()
+        public async Task<PagedResponse<IEnumerable<ProductDTO>>> GetAllProducts(GetAllProductsQuery query)
         {
             var result = _unitOfWork.Product.GetAll(includeProperties: "Category");
 
@@ -26,9 +27,10 @@ namespace ZStore.Application.Api.Features
                 Category = p.Category.Name,
             }).ToList();
 
-            return new Response<List<ProductDTO>>(transformedResult);
+            return new PagedResponse<IEnumerable<ProductDTO>>(transformedResult, 
+                query.PageNumber, query.PageSize
+                );
         }
-
         public async Task<Response<ProductDTO>> GetProductbyId(int id)
         {
             var result = await _unitOfWork.Product.GetByIdAsync(id);
@@ -44,16 +46,23 @@ namespace ZStore.Application.Api.Features
             });
         }
 
-        public async Task<Response<List<Product>>> GetProductsByCategory(string categoryName)
+        public async Task<PagedResponse<IEnumerable<ProductDTO>>> GetProductsByCategory(GetProductsByCategoryQuery query)
         {
-            var products = await _unitOfWork.Product.GetProductsByCategoryAsync(categoryName);
+            var products = await _unitOfWork.Product.GetProductsByCategoryAsync(query.CategoryName);
 
-            if (products.Count == 0)
+            var transformedResult = products.Select(p => new ProductDTO
             {
-                return new Response<List<Product>>("No products found for the provided category.");
-            }
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description,
+                Category = p.Category.Name,
+            }).ToList();
 
-            return new Response<List<Product>>(products, "Products retrieved successfully.");
+
+            return new PagedResponse<IEnumerable<ProductDTO>>(transformedResult, 
+                query.PageNumber, 
+                query.PageSize
+                );
         }
     }
 }

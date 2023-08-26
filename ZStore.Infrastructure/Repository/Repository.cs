@@ -49,6 +49,15 @@ namespace ZStore.Infrastructure.Repository
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<IReadOnlyList<TEntity>> GetPagedResponseAsync(int pageNumber, int pageSize)
+        {
+            return await _dbSet
+                .Skip((pageNumber -1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter)
         {
             return await _dbSet.Where(filter).ToListAsync();

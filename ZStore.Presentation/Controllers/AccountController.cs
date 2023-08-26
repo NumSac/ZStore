@@ -2,16 +2,17 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using ZStore.Application.Api.Features;
+using ZStore.Application.Api.Account.Queries;
+using ZStore.Application.Api.Account.Service;
 using ZStore.Application.DTOs;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Utils;
 
 namespace ZStore.Presentation.Controllers
 {
-    [Authorize(Roles = SD.Role_User)]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = SD.Role_User)]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -60,7 +61,7 @@ namespace ZStore.Presentation.Controllers
             Claim? nameIdentifierClaim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
 
             if (nameIdentifierClaim == null)
-                throw new ApiException($"No Id associated");
+                throw new ApiException($"Invalid Token");
 
             return nameIdentifierClaim.Value;
         }

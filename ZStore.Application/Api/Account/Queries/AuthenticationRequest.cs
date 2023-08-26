@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ZStore.Application.DTOs
+namespace ZStore.Application.Api.Account.Queries
 {
     public class AuthenticationRequest
     {
