@@ -1,4 +1,4 @@
-﻿using ZStore.Application.Api.Products.Queries;
+﻿using ZStore.Application.Api.Product.Queries;
 using ZStore.Application.DTOs;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Models;

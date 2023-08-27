@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ZStore.Application.Api.Products.Queries;
-using ZStore.Application.Api.Products.Service;
+using ZStore.Application.Api.Product.Queries;
+using ZStore.Application.Api.Product.Service;
 using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Presentation.Controllers
@@ -18,19 +18,19 @@ namespace ZStore.Presentation.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetProducts(GetAllProductsQuery query)
+        [HttpGet("GetProducts")]
+        public async Task<IActionResult> GetProducts([FromQuery] GetAllProductsQuery query)
         {
             return Ok(await _productService.GetAllProducts(query));
         }
 
-        [HttpGet("{productId}")]
+        [HttpGet("Product/{productId}")]
         public async Task<IActionResult> GetProduct(int productId)
         {
             return Ok(await _productService.GetProductbyId(productId));
         }
 
-        [HttpGet]
+        [HttpGet("GetProductsByCategory")]
         public async Task<IActionResult> GetProductsByCategory([FromQuery] GetProductsByCategoryQuery query)
         {
             return Ok(await _productService.GetProductsByCategory(query));

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZStore.Presentation.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class finishedModelsStickedWithIntPrimaryKey : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -209,7 +209,7 @@ namespace ZStore.Presentation.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<double>(type: "REAL", nullable: false),
-                    ProductDetailId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductDetailId = table.Column<int>(type: "INTEGER", nullable: true),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     CompanyId = table.Column<string>(type: "TEXT", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -234,8 +234,7 @@ namespace ZStore.Presentation.Migrations
                         name: "FK_Products_ProductDetails_ProductDetailId",
                         column: x => x.ProductDetailId,
                         principalTable: "ProductDetails",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

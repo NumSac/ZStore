@@ -14,10 +14,8 @@ using ZStore.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
-using ZStore.Application.Api.Products.Service;
 using ZStore.Application.Api.Account.Service;
+using ZStore.Application.Api.Product.Service;
 
 namespace ZStore.WebApi
 {

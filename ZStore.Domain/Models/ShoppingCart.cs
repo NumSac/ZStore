@@ -10,7 +10,7 @@ namespace ZStore.Domain.Models
 {
     public class ShoppingCart : BaseEntity
     {
-        public List<int> ProductIds { get; set; }
+        public List<string> ProductIds { get; set; } = new List<string>();
         public string ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
         public ApplicationUser ApplicationUser { get; set; }

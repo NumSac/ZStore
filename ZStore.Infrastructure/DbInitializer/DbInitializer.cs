@@ -90,7 +90,9 @@ namespace ZStore.Infrastructure.DbInitializer
                 new Category { Name = "Electronics" },
                 new Category { Name = "Clothing" },
                 new Category { Name = "Furniture" },
-                // Add more categories as needed
+                new Category { Name = "Movies" },
+                new Category { Name = "Food" },
+                new Category { Name = "Cars" },
             };
 
                 _context.Categories.AddRange(categories);

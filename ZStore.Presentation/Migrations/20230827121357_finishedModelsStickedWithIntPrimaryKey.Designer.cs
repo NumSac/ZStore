@@ -11,8 +11,8 @@ using ZStore.Infrastructure.Data;
 namespace ZStore.Presentation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230822150239_MadeProductDetailNullable")]
-    partial class MadeProductDetailNullable
+    [Migration("20230827121357_finishedModelsStickedWithIntPrimaryKey")]
+    partial class finishedModelsStickedWithIntPrimaryKey
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

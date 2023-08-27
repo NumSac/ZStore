@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZStore.Application.Api.Products.Queries
+namespace ZStore.Application.Api.Product.Queries
 {
     public  class GetAllProductsQuery
     {

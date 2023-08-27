@@ -69,7 +69,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ProductVM productVM)
+        public async Task<IActionResult> Create([FromForm] ProductVM productVM)
         {
             if (ModelState.IsValid)
             {
@@ -84,6 +84,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
                     Price = productVM.Price,
                     CategoryId = productVM.CategoryId,
                     CompanyId = companyUser.Id,
+                    ProductDetail = new ProductDetail(),
                 };
 
                 await _unitOfWork.Product.InsertAsync(productToSave);
@@ -201,7 +202,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
                         await transaction.CommitAsync();
                         return RedirectToAction(nameof(Index));
                     }
-                    catch (Exception ex)
+                    catch 
                     {
                         await transaction.RollbackAsync();
                         // Handle the exception, such as logging it

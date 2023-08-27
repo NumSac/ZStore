@@ -10,7 +10,7 @@ namespace ZStore.Domain.Models
         public int OrderHeaderId { get; set; }
         [ForeignKey(nameof(OrderHeaderId))]
         public OrderHeader OrderHeader { get; set; }
-        
+        public List<string> ProductIds { get; set; } = new List<string>();
         public double Price { get; set; }
     }
 }

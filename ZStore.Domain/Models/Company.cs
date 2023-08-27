@@ -22,7 +22,7 @@ namespace ZStore.Domain.Models
         public string Country { get; set; } = string.Empty;
         [Required]
         public string VatNumber { get; set; } = string.Empty;
-        public CompanyProfile Profile { get; set; } = new CompanyProfile();
+        public CompanyProfile? Profile { get; set; }
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
