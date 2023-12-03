@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ZStore.Application.Features;
 using ZStore.Application.Helpers;
 using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.DbInitializer;
@@ -15,8 +14,8 @@ using ZStore.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
+using ZStore.Application.Api.Account.Service;
+using ZStore.Application.Api.Product.Service;
 
 namespace ZStore.WebApi
 {
@@ -63,6 +62,7 @@ namespace ZStore.WebApi
                 options.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
 
@@ -125,7 +125,7 @@ namespace ZStore.WebApi
             services.AddScoped<ITokenService, TokenService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IProductService, ProductService>();
 
             services.AddEndpointsApiExplorer();
@@ -171,8 +171,8 @@ namespace ZStore.WebApi
         {
             if (env.IsDevelopment())
             {
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
 

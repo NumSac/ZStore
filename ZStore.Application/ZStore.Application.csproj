@@ -15,4 +15,10 @@
     <ProjectReference Include="..\ZStore.Infrastructure\ZStore.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Api\Company\Service\" />
+    <Folder Include="Api\Company\Queries\" />
+    <Folder Include="Transactions\" />
+  </ItemGroup>
+
 </Project>

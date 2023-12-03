@@ -26,7 +26,7 @@ namespace ZStore.Infrastructure.Repository.IRepository
 
         Task<TEntity?> GetByIdAsync(object id);
 
-        Task<TEntity> InsertAsync(TEntity entity);
+        Task InsertAsync(TEntity entity);
 
         Task InsertRangeAsync(IEnumerable<TEntity> entities);
 
@@ -45,5 +45,6 @@ namespace ZStore.Infrastructure.Repository.IRepository
         IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, string? includeProperties = null);
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entity);
+        Task<IReadOnlyList<TEntity>> GetPagedResponseAsync(int pageNumber, int pageSize);
     }
 }

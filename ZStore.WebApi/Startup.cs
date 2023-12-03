@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ZStore.Application.Features;
 using ZStore.Application.Helpers;
 using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.DbInitializer;
@@ -13,6 +12,7 @@ using ZStore.WebApi.Util;
 using Microsoft.OpenApi.Models;
 using ZStore.WebApi.Middleware;
 using Microsoft.Extensions.Caching.Distributed;
+using ZStore.Application.Api.Features;
 
 namespace ZStore.WebApi
 {
@@ -82,8 +82,8 @@ namespace ZStore.WebApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<RetrieveCompany>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(option =>

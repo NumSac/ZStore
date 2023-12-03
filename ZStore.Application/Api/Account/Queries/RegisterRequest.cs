@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ZStore.Application.DTOs.Common;
 
-namespace ZStore.Application.DTOs
+namespace ZStore.Application.Api.Account.Queries
 {
     public class RegisterRequest : Credentials
     {

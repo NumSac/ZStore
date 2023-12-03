@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ZStore.Application.Api.Account.Queries;
 using ZStore.Application.DTOs;
 using ZStore.Application.Helpers;
-using ZStore.Domain.Exceptions;
 using ZStore.Domain.Common;
+using ZStore.Domain.Exceptions;
+using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
-namespace ZStore.Application.Features
+namespace ZStore.Application.Api.Account.Service
 {
-    public class UserService : IUserService
+    public class AccountService : IAccountService
     {
         private readonly UserManager<AccountBaseEntity> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -16,7 +18,7 @@ namespace ZStore.Application.Features
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(UserManager<AccountBaseEntity> userManager,
+        public AccountService(UserManager<AccountBaseEntity> userManager,
              RoleManager<IdentityRole> roleManager, SignInManager<AccountBaseEntity> signInManger,
             ITokenService tokenService, IUnitOfWork unitOfWork
             )
@@ -69,11 +71,10 @@ namespace ZStore.Application.Features
             if (userWithSameName != null)
                 throw new ApiException($"Username '{request.UserName}' is already taken");
 
-            var user = new AccountBaseEntity
-            {
-                UserName = request.UserName,
-                Email = request.Email,
-            };
+            var user = CreateUser();
+
+            user.UserName = request.UserName;
+            user.Email = request.Email;
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
@@ -88,18 +89,34 @@ namespace ZStore.Application.Features
 
         public async Task<Response<string>> UpdateUserInfo(string id, UpdateUserRequest request)
         {
-            var userToUpdate = await _unitOfWork.ApplicationUser.GetByIdAsync(id);
-            if (userToUpdate == null)
-                throw new ApiException($"User with Id '{id}' not found");
+            using (var transaction = _unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    var userToUpdate = await _unitOfWork.ApplicationUser.GetByIdAsync(id)
+                        ?? throw new ApiException($"User with Id '{id}' not found");
 
-            userToUpdate.UserName = request.UserName;
-            userToUpdate.Email = request.Email;
-            userToUpdate.PhoneNumber = request.PhoneNumber;
-            
 
-            _unitOfWork.ApplicationUser.Update(userToUpdate);
+                    userToUpdate.UserName = request.UserName;
+                    userToUpdate.Email = request.Email;
+                    userToUpdate.PhoneNumber = request.PhoneNumber;
+                    userToUpdate.StreetAddress = request.StreetAddress;
+                    userToUpdate.City = request.City;
+                    userToUpdate.PostalCode = request.PostalCode;
+                    userToUpdate.Country = request.Country;
 
-            await _unitOfWork.SaveAsync();
+                    _unitOfWork.ApplicationUser.Update(userToUpdate);
+
+                    await _unitOfWork.SaveAsync();
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new ApiException(ex.Message);
+                }
+            }
 
             return new Response<string>("User updated");
         }
@@ -128,6 +145,18 @@ namespace ZStore.Application.Features
             await _unitOfWork.SaveAsync();
 
             return new Response<string>("User deleted");
+        }
+
+        private static ApplicationUser CreateUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<ApplicationUser>();
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(AccountBaseEntity)}'");
+            }
         }
     }
 }

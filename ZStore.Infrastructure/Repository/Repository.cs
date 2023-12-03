@@ -49,6 +49,15 @@ namespace ZStore.Infrastructure.Repository
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<IReadOnlyList<TEntity>> GetPagedResponseAsync(int pageNumber, int pageSize)
+        {
+            return await _dbSet
+                .Skip((pageNumber -1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter)
         {
             return await _dbSet.Where(filter).ToListAsync();
@@ -94,10 +103,9 @@ namespace ZStore.Infrastructure.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task<TEntity> InsertAsync(TEntity entity)
+        public async Task InsertAsync(TEntity entity)
         {
-            var insertedEntity = await _dbSet.AddAsync(entity);
-            return insertedEntity.Entity;
+            await _dbSet.AddAsync(entity);
         }
 
         public async Task InsertRangeAsync(IEnumerable<TEntity> entities)
@@ -169,7 +177,9 @@ namespace ZStore.Infrastructure.Repository
 
         }
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, string? includeProperties = null)
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, 
+            string? includeProperties = null
+            )
         {
             IQueryable<TEntity> query = _dbSet;
             if (filter != null)

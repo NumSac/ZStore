@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ZStore.Application.Features;
+using ZStore.Application.Api.Features;
 
 namespace ZStore.WebApi.Controllers
 {

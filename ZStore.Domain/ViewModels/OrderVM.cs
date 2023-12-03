@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZStore.Application.Features
+namespace ZStore.Domain.ViewModels
 {
-    public interface IAccountService
+    internal class OrderVM
     {
     }
 }
