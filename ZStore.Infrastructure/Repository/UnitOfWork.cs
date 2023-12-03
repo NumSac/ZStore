@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using ZStore.Domain.Exceptions;
 using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.Repository.IRepository;
 
@@ -47,7 +48,7 @@ namespace ZStore.Infrastructure.Repository
                 _transaction.Commit();
                 _transaction.Dispose();
             }
-            throw new InvalidOperationException("Db Transaction is not initialized");
+            throw new DbException("Db Transaction is not initialized");
         }
 
         public void Rollback()
@@ -57,7 +58,7 @@ namespace ZStore.Infrastructure.Repository
                 _transaction.Rollback();
                 _transaction.Dispose();
             }
-            throw new InvalidOperationException("Db Transaction is not initialized");
+            throw new DbException("Db Transaction is not initialized");
         }
 
         public void Dispose()

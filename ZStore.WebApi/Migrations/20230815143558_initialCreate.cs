@@ -34,6 +34,7 @@ namespace ZStore.WebApi.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
+                
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                 });

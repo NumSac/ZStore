@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ZStore.Domain.Common;
 using ZStore.Domain.Models;
+using ZStore.Infrastructure;
 
 namespace ZStore.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AccountBaseEntity>
+    public class ApplicationDbContext : IdentityDbContext<AccountBaseEntity>, IApplicationDbContext
     {
         public DbSet<Domain.Common.AccountBaseEntity> Accounts => Set<AccountBaseEntity>();
         public DbSet<AccountBaseEntity> Companies => Set<AccountBaseEntity>();
@@ -16,6 +17,9 @@ namespace ZStore.Infrastructure.Data
         public DbSet<ProductDetail> ProductDetails => Set<ProductDetail>();
         public DbSet<ProductImage> ProductImages => Set<ProductImage>();
         public DbSet<Product> Products => Set<Product>();
+        public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
+        public DbSet<OrderHeader> OrderHeaders => Set<OrderHeader>();
+        public DbSet<ShoppingCart> ShoppingCarts => Set<ShoppingCart>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

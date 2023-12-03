@@ -1,7 +1,7 @@
-﻿using ZStore.Application.Api.Product.Queries;
+﻿using ZStore.Application.Api.Interfaces;
+using ZStore.Application.Api.Product.Queries;
+using ZStore.Application.Api.Product.Queries.GetProductsByCategory;
 using ZStore.Application.DTOs;
-using ZStore.Domain.Exceptions;
-using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 

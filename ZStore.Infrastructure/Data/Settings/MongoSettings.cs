@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZStore.Infrastructure.Data.Settings
 {
-    internal class MongoSettings
+    public class MongoSettings
     {
     }
 }
