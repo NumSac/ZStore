@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /ZStore.WebApi/ZStore.WebApi.csproj
 /ZStore.Presentation/samite_development.db
+/frontend
