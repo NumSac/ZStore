@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.8.0" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
   </ItemGroup>
@@ -16,9 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Api\Account\Queries\GetUser\" />
+    <Folder Include="Api\Cart\Commands\RemoveItem\" />
+    <Folder Include="Api\Cart\Queries\GetShoppingCartById\" />
+    <Folder Include="Api\Company\Commands\" />
+    <Folder Include="Api\Company\Queries\GetCompanyById\" />
     <Folder Include="Api\Company\Service\" />
     <Folder Include="Api\Company\Queries\" />
-    <Folder Include="Transactions\" />
+    <Folder Include="Api\Product\Commands\" />
   </ItemGroup>
 
 </Project>

@@ -8,14 +8,13 @@ using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.DbInitializer;
 using ZStore.Infrastructure.Repository.IRepository;
 using ZStore.Infrastructure.Repository;
-using Microsoft.Extensions.Caching.Distributed;
-using ZStore.Domain.Models;
-using ZStore.Presentation.Middleware;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
 using ZStore.Application.Api.Account.Service;
 using ZStore.Application.Api.Product.Service;
+using ZStore.Application.Api.Interfaces;
+using ZStore.Presentation.Services;
 
 namespace ZStore.WebApi
 {
@@ -29,6 +28,10 @@ namespace ZStore.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
+
+
             services.AddControllers();
             services.AddControllersWithViews();
 
@@ -64,8 +67,6 @@ namespace ZStore.WebApi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
-
-
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -123,6 +124,8 @@ namespace ZStore.WebApi
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IAccountService, AccountService>();
@@ -160,7 +163,7 @@ namespace ZStore.WebApi
                                 Id = "Bearer"
                             }
                         },
-                        new string[] { }
+                        Array.Empty<string>()
                     }
                     }
                 );

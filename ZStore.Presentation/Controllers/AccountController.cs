@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using ZStore.Application.Api.Account.Queries;
-using ZStore.Application.Api.Account.Service;
-using ZStore.Application.DTOs;
+using ZStore.Application.Api.Interfaces;
+using ZStore.Application.DTOs.Account;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Utils;
 
@@ -22,21 +21,17 @@ namespace ZStore.Presentation.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] AuthenticationRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] AuthenticationRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
             return Ok(await _accountService.AuthenticateAsync(request));
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
             return Ok(await _accountService.RegisterAsync(request));
         }
 

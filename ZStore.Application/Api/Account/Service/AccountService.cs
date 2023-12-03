@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using ZStore.Application.Api.Account.Queries;
-using ZStore.Application.DTOs;
+using ZStore.Application.Api.Interfaces;
+using ZStore.Application.DTOs.Account;
 using ZStore.Application.Helpers;
 using ZStore.Domain.Common;
 using ZStore.Domain.Exceptions;
