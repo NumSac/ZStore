@@ -1,7 +1,7 @@
 ﻿using ZStore.Application.DTOs.Account;
 using ZStore.Domain.Utils;
 
-namespace ZStore.Application.Api.Interfaces
+namespace ZStore.Application.Identity
 {
     public interface IAccountService
     {

@@ -18,7 +18,7 @@ namespace ZStore.Application.Behaviors
         private readonly IUser _user;
         private readonly  IIdentityService _identityService;
 
-        public PerfomanceBehavior(Stopwatch timer, ILogger<TRequest> logger, IUser user, IIdentityService identityService)
+        public PerfomanceBehavior(ILogger<TRequest> logger, IUser user, IIdentityService identityService)
         {
             _timer = new Stopwatch();
             _logger = logger;

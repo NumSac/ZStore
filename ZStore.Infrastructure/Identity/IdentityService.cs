@@ -2,17 +2,18 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ZStore.Application.Models;
+using ZStore.Domain.Common;
 using ZStore.Domain.Models;
 
 namespace ZStore.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+        private readonly UserManager<AccountBaseEntity> _userManager;
+        private readonly IUserClaimsPrincipalFactory<AccountBaseEntity> _userClaimsPrincipalFactory;
         private readonly IAuthorizationService _authorizationService;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory, IAuthorizationService authorizationService)
+        public IdentityService(UserManager<AccountBaseEntity> userManager, IUserClaimsPrincipalFactory<AccountBaseEntity> userClaimsPrincipalFactory, IAuthorizationService authorizationService)
         {
             _userManager = userManager;
             _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
@@ -69,7 +70,7 @@ namespace ZStore.Infrastructure.Identity
             return user != null ? await DeleteUserAsync(user) : Result.Success();
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        public async Task<Result> DeleteUserAsync(AccountBaseEntity user)
         {
             var result = await _userManager.DeleteAsync(user);
 

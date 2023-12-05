@@ -39,13 +39,14 @@ namespace ZStore.Application.Api.Account.Commands.LoginUser
                     var token = await _tokenService.CreateToken(userToLogin);
                     var rolesList = await _userManager.GetRolesAsync(userToLogin).ConfigureAwait(false);
 
-                    var jwtResponse = new AuthenticationResponse();
-
-                    jwtResponse.Id = userToLogin.Id;
-                    jwtResponse.UserName = userToLogin.UserName!;
-                    jwtResponse.Email = userToLogin.Email!;
-                    jwtResponse.Roles = rolesList.ToList();
-                    jwtResponse.Token = token;
+                    var jwtResponse = new AuthenticationResponse
+                    {
+                        Id = userToLogin.Id,
+                        UserName = userToLogin.UserName!,
+                        Email = userToLogin.Email!,
+                        Roles = rolesList.ToList(),
+                        Token = token
+                    };
 
                     return new Response<AuthenticationResponse>(jwtResponse);
                 } 

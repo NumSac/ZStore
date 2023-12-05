@@ -32,7 +32,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
             if (companyUser == null)
                 return Forbid();
 
-            var products = await _unitOfWork.Product.GetAsync(p => p.CompanyId == companyUser.Id);
+            var products = await _unitOfWork.Product.GetAsync(p => p.OwnerId == companyUser.Id);
             if (products == null)
                 return NotFound();
 
@@ -83,7 +83,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
                     Description = productVM.Description,
                     Price = productVM.Price,
                     CategoryId = productVM.CategoryId,
-                    CompanyId = companyUser.Id,
+                    OwnerId = companyUser.Id,
                     ProductDetail = new ProductDetail(),
                 };
 
@@ -116,7 +116,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
                 return NotFound();
             }
             
-            if (product.CompanyId != companyUser.Id)
+            if (product.OwnerId != companyUser.Id)
             {
                 return Forbid();
             }
@@ -146,7 +146,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
 
             var companyUser = await _userManager.GetUserAsync(User);
 
-            if (companyUser == null || product.CompanyId != companyUser.Id)
+            if (companyUser == null || product.OwnerId != companyUser.Id)
             {
                 return Forbid();
             }
@@ -180,7 +180,7 @@ namespace ZStore.Presentation.Areas.Company.Controllers
 
             var companyUser = await _userManager.GetUserAsync(User);
 
-            if (companyUser == null || product.CompanyId != companyUser.Id)
+            if (companyUser == null || product.OwnerId != companyUser.Id)
             {
                 return Forbid();
             }

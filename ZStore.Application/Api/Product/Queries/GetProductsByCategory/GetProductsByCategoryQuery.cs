@@ -25,7 +25,7 @@ namespace ZStore.Application.Api.Product.Queries.GetProductsByCategory
 
         public async Task<PagedResponse<IEnumerable<ProductsViewModel>>> Handle(GetProductsByCategoryQuery query, CancellationToken cancellationToken)
         {
-            var validFilter = _mapper.Map<ProductsViewModel>(query);
+            var validFilter = _mapper.Map<GetAllProductsParameter>(query);
             // Implement custom Linq query here for easy paging
             var products = await _unitOfWork.Product.GetProductsByCategoryAsync(query.CategoryName);
             var productViewModel = _mapper.Map<IEnumerable<ProductsViewModel>>(products);

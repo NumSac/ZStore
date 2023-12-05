@@ -12,7 +12,10 @@ using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Application.Api.Product.Queries.GetProductById
 {
-    public record GetProductByIdQuery(int Id) : IRequest<Response<ProductsViewModel>>;
+    public class GetProductByIdQuery : IRequest<Response<ProductsViewModel>>
+    {
+        public int Id { get; set; }
+    }
 
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Response<ProductsViewModel>>
     {

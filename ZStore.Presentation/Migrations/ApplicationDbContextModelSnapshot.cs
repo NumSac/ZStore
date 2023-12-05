@@ -411,11 +411,7 @@ namespace ZStore.Presentation.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CompanyId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CompanyId1")
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
@@ -426,6 +422,10 @@ namespace ZStore.Presentation.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Price")
@@ -443,8 +443,6 @@ namespace ZStore.Presentation.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CompanyId1");
 
                     b.HasIndex("ProductDetailId");
 
@@ -635,23 +633,15 @@ namespace ZStore.Presentation.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ZStore.Domain.Common.AccountBaseEntity", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ZStore.Domain.Models.Company", null)
                         .WithMany("Products")
-                        .HasForeignKey("CompanyId1");
+                        .HasForeignKey("CompanyId");
 
                     b.HasOne("ZStore.Domain.Models.ProductDetail", "ProductDetail")
                         .WithMany()
                         .HasForeignKey("ProductDetailId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Company");
 
                     b.Navigation("ProductDetail");
                 });

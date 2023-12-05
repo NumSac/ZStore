@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZStore.Application.Models;
+using ZStore.Domain.Common;
 using ZStore.Domain.Models;
 
 namespace ZStore.Infrastructure.Identity
@@ -13,7 +14,7 @@ namespace ZStore.Infrastructure.Identity
         Task<bool> AuthorizeAsync(string userId, string policyName);
         Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
         Task<Result> DeleteUserAsync(string userId);
-        Task<Result> DeleteUserAsync(ApplicationUser user);
+        Task<Result> DeleteUserAsync(AccountBaseEntity user);
         Task<string?> GetUserNameAsync(string userId);
         Task<bool> IsInRoleAsync(string userId, string role);
     }

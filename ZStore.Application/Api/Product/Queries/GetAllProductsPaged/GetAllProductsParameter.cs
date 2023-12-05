@@ -9,5 +9,6 @@ namespace ZStore.Application.Api.Product.Queries.GetAllProductsPaged
 {
     public class GetAllProductsParameter : RequestParameter
     {
+
     }
 }

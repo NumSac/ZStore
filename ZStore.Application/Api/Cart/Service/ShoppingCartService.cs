@@ -1,5 +1,4 @@
-﻿using ZStore.Application.Api.Cart.Queries;
-using ZStore.Application.Api.Interfaces;
+﻿using ZStore.Application.Api.Interfaces;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Utils;
 using ZStore.Domain.ViewModels;
