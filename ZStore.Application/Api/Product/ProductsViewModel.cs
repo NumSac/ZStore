@@ -1,4 +1,6 @@
-﻿namespace ZStore.Application.Api.Product
+﻿using AutoMapper;
+
+namespace ZStore.Application.Api.Product
 {
     public class ProductsViewModel
     {
@@ -6,5 +8,13 @@
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Rate { get; set; }
+
+        private class Mapping : Profile
+        {
+            public Mapping() 
+            {
+                CreateMap<Domain.Models.Product, ProductsViewModel>();
+            }
+        }
     }
 }

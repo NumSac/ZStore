@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZStore.Application.Api.Account.Commands.EditUser
+namespace ZStore.Application.Api.Cart.Commands.UpdateItemFromShoppingCart
 {
-    public class EditUserCommandValidator
+    internal class UpdateItemFromShoppingCartCommandValidator
     {
     }
 }

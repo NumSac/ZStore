@@ -14,7 +14,9 @@ namespace ZStore.Infrastructure
             var connectionString = configuration.GetConnectionString("DevelopmentConnection");
 
             Guard.Against.Null(connectionString, message: "Connection string 'Database' not found");
+
             services.AddTransient<IIdentityService, IdentityService>();
+
 
             return services;
         }

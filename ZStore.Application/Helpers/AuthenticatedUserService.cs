@@ -1,7 +1,8 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 using ZStore.Application.Interfaces;
 
-namespace ZStore.Presentation.Services
+namespace ZStore.Application.Helpers
 {
     public class AuthenticatedUserService : IUser, IAuthenticatedUserService
     {

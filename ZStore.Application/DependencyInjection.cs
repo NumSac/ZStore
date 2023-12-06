@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZStore.Application.Behaviors;
 using ZStore.Application.Helpers;
+using ZStore.Application.Identity;
 
 namespace ZStore.Application
 {
@@ -21,6 +22,8 @@ namespace ZStore.Application
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddTransient<IAccountService,  AccountService>();
 
             services.AddMediatR(cfg =>
             {

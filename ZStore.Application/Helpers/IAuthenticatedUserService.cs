@@ -1,4 +1,4 @@
-﻿namespace ZStore.Presentation.Services
+﻿namespace ZStore.Application.Helpers
 {
     public interface IAuthenticatedUserService
     {

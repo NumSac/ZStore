@@ -6,7 +6,7 @@ using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Application.Api.Cart.Service
 {
-    public class ShoppingCartService : IShoppingCartService
+    public class ShoppingCartService
     {
         private readonly IUnitOfWork _unitOfWork;
         public ShoppingCartService(IUnitOfWork unitOfWork) 
