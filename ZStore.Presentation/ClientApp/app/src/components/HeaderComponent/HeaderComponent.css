@@ -1,0 +1,12 @@
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #111827; /* Dark background color */
+    min-width: 100vw;
+    z-index: 1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}

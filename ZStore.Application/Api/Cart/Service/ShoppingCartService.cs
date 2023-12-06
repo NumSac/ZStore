@@ -1,5 +1,4 @@
-﻿using ZStore.Application.Api.Cart.Queries;
-using ZStore.Application.Api.Interfaces;
+﻿using ZStore.Application.Api.Interfaces;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Utils;
 using ZStore.Domain.ViewModels;
@@ -7,7 +6,7 @@ using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Application.Api.Cart.Service
 {
-    public class ShoppingCartService : IShoppingCartService
+    public class ShoppingCartService
     {
         private readonly IUnitOfWork _unitOfWork;
         public ShoppingCartService(IUnitOfWork unitOfWork) 

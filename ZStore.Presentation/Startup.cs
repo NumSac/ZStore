@@ -11,10 +11,11 @@ using ZStore.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
-using ZStore.Application.Api.Account.Service;
-using ZStore.Application.Api.Product.Service;
+using ZStore.Application.Identity;
 using ZStore.Application.Api.Interfaces;
-using ZStore.Presentation.Services;
+using ZStore.Application;
+using ZStore.Infrastructure;
+using ZStore.Presentation;
 
 namespace ZStore.WebApi
 {
@@ -30,30 +31,21 @@ namespace ZStore.WebApi
         {
             services.AddHealthChecks();
 
-
-
             services.AddControllers();
             services.AddControllersWithViews();
 
 
-            services.AddDbContext<ApplicationDbContext>(
-                options =>
-                    options.UseSqlite(
-                        Configuration.GetConnectionString("DevelopmentConnection"),
-                        b => b.MigrationsAssembly("ZStore.Presentation")
-                    )
-            );
+            // Add Layerss
+            services.AddApplicationLayer();
+            services.AddInfrastructureServices(Configuration);
+            services.AddPresentationServices();
 
-
-            /*
-            services.AddStackExchangeRedisCache(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.Configuration = Configuration["RedisConnectionSettings:ConnectionString"];
-                options.InstanceName = "Samite_";
+                options.UseSqlite(Configuration.GetConnectionString("DevelopmentConnection"), 
+                    b => b.MigrationsAssembly("ZStore.Presentation"));
             });
-            */
 
-            
             services.AddIdentity<AccountBaseEntity, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -123,51 +115,8 @@ namespace ZStore.WebApi
             services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ITokenService, TokenService>();
-
-            services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IProductService, ProductService>();
-
-            services.AddEndpointsApiExplorer();
-
-            // Add services to the container.
-            services.AddRazorPages();
-
-            services.AddSwaggerGen(option =>
-            {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
-                option.AddSecurityDefinition(
-                    "Bearer",
-                    new OpenApiSecurityScheme
-                    {
-                        In = ParameterLocation.Header,
-                        Description = "Please enter a valid token",
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.Http,
-                        BearerFormat = "JWT",
-                        Scheme = "Bearer"
-                    }
-                );
-                option.AddSecurityRequirement(
-                    new OpenApiSecurityRequirement
-                    {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                    }
-                );
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -189,10 +138,12 @@ namespace ZStore.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHealthChecks("/health");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                //endpoints.MapControllers();
+                endpoints.MapControllers();
                 endpoints.MapControllerRoute(name: "default", 
                     pattern: "{area=Company}/{controller=Product}/{action=Index}/{id?}");
             });
@@ -200,7 +151,7 @@ namespace ZStore.WebApi
             SeedDatabase(app);
 
         }
-        private void SeedDatabase(IApplicationBuilder app)
+        private static void SeedDatabase(IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
