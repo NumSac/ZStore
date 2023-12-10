@@ -11,7 +11,7 @@ namespace ZStore.Domain.Models
         [ForeignKey(nameof(OrderHeaderId))]
         public OrderHeader OrderHeader { get; set; }
         [NotMapped]
-        public List<string> ProductIds { get; set; } = new List<string>();
+        public List<string> ProductIds { get; set; } 
         public double Price { get; set; }
     }
 }

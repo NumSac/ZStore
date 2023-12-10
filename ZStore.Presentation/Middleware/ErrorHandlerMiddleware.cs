@@ -27,7 +27,7 @@ namespace ZStore.Presentation.Middleware
                 var responseModel = new Response<string>
                 {
                     Succeeded = false,
-                    Message = err.Message
+                    Message = err.Message,
                 };
 
                 response.StatusCode = err switch

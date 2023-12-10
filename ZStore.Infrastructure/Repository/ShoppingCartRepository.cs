@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Models;
 using ZStore.Infrastructure.Data;
@@ -14,47 +16,29 @@ namespace ZStore.Infrastructure.Repository
         {
             _context = context;
         }
-        /*
-        public async Task AddProductToShoppingCart(string userId, Product product)
+
+        public async Task<ShoppingCart> GetOrCreateShoppingCartAsync(string userId)
         {
-            var shoppingCart = await GetOrCreateShoppingCartAsync(userId);
-            shoppingCart.ProductIds.Add(product.Id);
-        }
+            // Check if a shopping cart for the user already exists
+            var existingCart = _context.ShoppingCarts 
+                .SingleOrDefault(cart => cart.ApplicationUserId == userId);
 
-        public async Task UpdateShoppingCartContents(string userId, Product product)
-        {
-            var shoppingCart = await GetOrCreateShoppingCartAsync(userId);
-
-            // Update shopping cart logic
-        }
-
-        public async Task DeleteFromShoppingCart(string userId, int productId)
-        {
-            var shoppingCart = await GetOrCreateShoppingCartAsync(userId);
-
-            if (shoppingCart.ProductIds.Contains(productId))
+            if (existingCart != null)
             {
-                shoppingCart.ProductIds.Remove(productId);
+                return existingCart;
             }
             else
             {
-                throw new DbException($"Product with id {productId} not found in Cart");
+                // If no cart exists, create a new shopping cart for the user
+                var newCart = new ShoppingCart
+                {
+                    ApplicationUserId = userId,
+                };
+                _context.ShoppingCarts.Add(newCart);
+                await _context.SaveChangesAsync();
+
+                return newCart;
             }
         }
-
-        private async Task<ShoppingCart> GetOrCreateShoppingCartAsync(string userId)
-        {
-            var shoppingCart = await _context.ShoppingCarts
-                .FirstOrDefaultAsync(sc => sc.ApplicationUserId == userId);
-
-            if (shoppingCart == null)
-            {
-                shoppingCart = new ShoppingCart { ApplicationUserId = userId };
-                _context.ShoppingCarts.Add(shoppingCart);
-            }
-
-            return shoppingCart;
-        }
-        */
     }
 }

@@ -22,5 +22,6 @@ namespace ZStore.Infrastructure
         DbSet<OrderDetail> OrderDetails { get; }
         DbSet<OrderHeader> OrderHeaders { get; }
         DbSet<ShoppingCart> ShoppingCarts { get; }
+        DbSet<ShoppingCartItem> ShoppingCartItems { get; }
     }
 }

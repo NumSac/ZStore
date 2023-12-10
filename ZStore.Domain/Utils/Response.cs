@@ -27,6 +27,14 @@ namespace ZStore.Domain.Utils
             Data = data;
         }
 
+        public Response(bool succeeded, string? message, List<string>? errors, T? data)
+        {
+            Succeeded = succeeded;
+            Message = message;
+            Errors = errors;
+            Data = data;
+        }
+
         public bool Succeeded { get; set; }
         public string? Message { get; set; }
         public List<string>? Errors { get; set; }

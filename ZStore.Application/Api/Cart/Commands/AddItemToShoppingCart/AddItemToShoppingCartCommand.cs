@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZStore.Application.Exceptions;
 using ZStore.Application.Helpers;
+using ZStore.Application.Interfaces;
+using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
@@ -17,9 +20,9 @@ namespace ZStore.Application.Api.Cart.Commands.AddItemToShoppingCart
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IAuthenticatedUserService _authenticatedUserService;
+        private readonly IUser _authenticatedUserService;
 
-        public AddItemToShoppingCartCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService)
+        public AddItemToShoppingCartCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IUser authenticatedUserService)
         {
             _authenticatedUserService = authenticatedUserService;
             _unitOfWork = unitOfWork;
@@ -32,13 +35,20 @@ namespace ZStore.Application.Api.Cart.Commands.AddItemToShoppingCart
 
             // Ensure the user is authorized to modify this cart
             if (string.IsNullOrEmpty(userId) || userId != command.OwnerId)
-                throw new UnauthorizedAccessException();
+                throw new ForbiddenAccessException();
 
             // Retrieve or create the ShoppingCart
-            var shoppingCart = await _unitOfWork.ShoppingCart.GetOrCreateCartAsync(userId);
+            var shoppingCart = await _unitOfWork.ShoppingCart.GetOrCreateShoppingCartAsync(userId);
+
+            var shoppingCartItem = new ShoppingCartItem
+            {
+                  ProductId = command.ItemId,
+                  Quantity = command.Count,
+                  ShoppingCartId = shoppingCart.Id,
+            };
 
             // Add the item to the cart
-            shoppingCart.ProductIds.Add(command.ItemId);
+            shoppingCart.ProductItems.Add(shoppingCartItem);
 
             // Save changes
             await _unitOfWork.SaveAsync();

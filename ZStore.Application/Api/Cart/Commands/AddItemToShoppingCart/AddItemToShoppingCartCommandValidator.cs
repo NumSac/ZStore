@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZStore.Application.Api.Cart.Commands.AddItemToShoppingCart
 {
-    internal class AddItemToShoppingCartCommandValidator
+    public class AddItemToShoppingCartCommandValidator
     {
     }
 }

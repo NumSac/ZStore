@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Pages\" />
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Areas\Company\Views\Home\" />
     <Folder Include="Areas\Company\Views\Order\" />

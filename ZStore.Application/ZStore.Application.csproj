@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="Api\Company\Commands\" />
     <Folder Include="Api\Company\Queries\GetCompanyById\" />
-    <Folder Include="Api\Company\Service\" />
     <Folder Include="Api\Company\Queries\" />
     <Folder Include="Api\Product\Commands\" />
   </ItemGroup>

@@ -20,7 +20,7 @@ namespace ZStore.Presentation.Infrastructure
                 { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
             };
         }
-        public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+        public async ValueTask<bool> HandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
             var exceptionType = exception.GetType();
 

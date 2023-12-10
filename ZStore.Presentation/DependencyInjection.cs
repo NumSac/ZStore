@@ -15,6 +15,7 @@ namespace ZStore.Presentation
         public static IServiceCollection AddPresentationServices(this IServiceCollection services)
         {
             services.AddScoped<IUser, AuthenticatedUserService>();
+
             //services.AddExceptionHandler<CustomExceptionHandler>();
 
             services.AddEndpointsApiExplorer();

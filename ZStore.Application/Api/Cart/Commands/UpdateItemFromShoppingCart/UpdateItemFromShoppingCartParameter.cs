@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ZStore.Application.Api.Cart.Commands.UpdateItemFromShoppingCart
 {
-    internal class UpdateItemFromShoppingCartParameter
+    public class UpdateItemFromShoppingCartParameter
     {
+        public int ItemId { get; set; }
+        public int ItemCount { get; set; }
+        public string OwnerId { get; set; }
     }
 }

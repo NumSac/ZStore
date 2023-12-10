@@ -21,6 +21,7 @@ namespace ZStore.Infrastructure.Data
         public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
         public DbSet<OrderHeader> OrderHeaders => Set<OrderHeader>();
         public DbSet<ShoppingCart> ShoppingCarts => Set<ShoppingCart>();
+        public DbSet<ShoppingCartItem> ShoppingCartItems => Set<ShoppingCartItem>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

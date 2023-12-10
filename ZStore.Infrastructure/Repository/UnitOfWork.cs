@@ -19,6 +19,7 @@ namespace ZStore.Infrastructure.Repository
         public IOrderDetailRepository OrderDetail { get; private set; }
         public IOrderHeaderRepository OrderHeader { get; private set; }
         public IShoppingCartRepository ShoppingCart { get; private set; }
+        public IShoppingCartItemRepository ShoppingCartItem { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -33,6 +34,7 @@ namespace ZStore.Infrastructure.Repository
             OrderDetail = new OrderDetailRepository(_context);
             OrderHeader = new OrderHeaderRepository(_context);
             ShoppingCart = new ShoppingCartRepository(_context);
+            ShoppingCartItem = new ShoppingCartItemRepository(_context);
         }
 
         public IDbContextTransaction BeginTransaction ()

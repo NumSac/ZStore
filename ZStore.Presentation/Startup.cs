@@ -12,10 +12,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
 using ZStore.Application.Identity;
-using ZStore.Application.Api.Interfaces;
 using ZStore.Application;
 using ZStore.Infrastructure;
 using ZStore.Presentation;
+using ZStore.Presentation.Middleware;
 
 namespace ZStore.WebApi
 {
@@ -66,6 +66,8 @@ namespace ZStore.WebApi
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
+            // Configure rather to use jwt auth or cookie auth 
             services
             .AddAuthentication(options =>
             {
@@ -121,11 +123,17 @@ namespace ZStore.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
+            } else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
 
             app.UseStaticFiles();
@@ -133,7 +141,8 @@ namespace ZStore.WebApi
 
             app.UseRouting();
 
-            //app.UseMiddleware<ErrorHandlerMiddleware>();
+
+
 
             app.UseAuthentication();
             app.UseAuthorization();
