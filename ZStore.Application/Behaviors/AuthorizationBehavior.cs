@@ -24,15 +24,13 @@ namespace ZStore.Application.Behaviors
         {
             var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
 
-            Console.WriteLine("Reached Authorization Behavior");
-
             if (authorizeAttributes.Any())
             {
                 Console.WriteLine("Passed Authorize attributes in Authorization Behavior");
                 // Must be authenticated user
                 if (_user.Id == null)
                 {
-                    throw new ForbiddenAccessException();
+                    throw new UnauthorizedAccessException();
                 }
 
                 // Role-based authorization

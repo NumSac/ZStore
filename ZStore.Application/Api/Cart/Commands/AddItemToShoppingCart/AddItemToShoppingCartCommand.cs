@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using ZStore.Application.Exceptions;
 using ZStore.Application.Helpers;
 using ZStore.Application.Interfaces;
@@ -9,13 +10,13 @@ using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Application.Api.Cart.Commands.AddItemToShoppingCart
 {
+    [Authorize(Roles = SD.Role_User)]
     public partial class AddItemToShoppingCartCommand : IRequest<Response<int>>
     {
         public string OwnerId { get; set; }
         public int ItemId { get; set; }
         public int Count { get; set; }
     }
-
     public class AddItemToShoppingCartCommandHandler : IRequestHandler<AddItemToShoppingCartCommand, Response<int>>
     {
         private readonly IUnitOfWork _unitOfWork;

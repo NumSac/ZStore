@@ -5,7 +5,6 @@ using ZStore.Domain.Common;
 using ZStore.Domain.Exceptions;
 using ZStore.Domain.Models;
 using ZStore.Domain.Utils;
-using ZStore.Infrastructure.Identity;
 using ZStore.Infrastructure.Repository.IRepository;
 
 namespace ZStore.Application.Identity

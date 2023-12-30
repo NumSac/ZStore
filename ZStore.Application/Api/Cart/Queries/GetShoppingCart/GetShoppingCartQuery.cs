@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ZStore.Application.Exceptions;
-using ZStore.Application.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using ZStore.Application.Interfaces;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
@@ -31,9 +30,9 @@ namespace ZStore.Application.Api.Cart.Queries.GetShoppingCart
         {
             var validFilter = _mapper.Map<GetShoppingCartParameter>(query);
             var userId = _authenticatedUserService.Id;
-            Console.WriteLine("Reached line 34 in GetShoppingCartQuery");
+
             if (string.IsNullOrEmpty(userId) || userId != query.OwnerId)
-                throw new ForbiddenAccessException();
+                throw new UnauthorizedAccessException();
 
             var shoppingCart = await _unitOfWork.ShoppingCart.GetAsync(x => x.ApplicationUserId == userId);
             if (shoppingCart == null)

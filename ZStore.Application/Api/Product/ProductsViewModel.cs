@@ -3,7 +3,7 @@ using ZStore.Application.Mappings;
 
 namespace ZStore.Application.Api.Product
 {
-    public class ProductsViewModel : IMapFrom<ZStore.Domain.Models.Product>
+    public class ProductsViewModel : IMapFrom<Domain.Models.Product>
     {
         public int Id { get; set; }
         public string Title { get; set; }

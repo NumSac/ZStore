@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using ZStore.Application.DTOs.Account;
 using ZStore.Application.Identity;
 using ZStore.Infrastructure.Identity;

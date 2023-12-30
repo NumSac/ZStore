@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using ZStore.Domain.Utils;
 
 namespace ZStore.Application.Behaviors
 {

@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="4.2.0" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
@@ -15,16 +13,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ZStore.Infrastructure\ZStore.Infrastructure.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Api\Company\Commands\" />
     <Folder Include="Api\Company\Queries\GetCompanyById\" />
     <Folder Include="Api\Company\Queries\" />
     <Folder Include="Api\Product\Commands\" />
   </ItemGroup>
-
 </Project>

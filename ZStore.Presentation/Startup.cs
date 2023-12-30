@@ -3,19 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ZStore.Application.Helpers;
 using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.DbInitializer;
-using ZStore.Infrastructure.Repository.IRepository;
-using ZStore.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.OpenApi.Models;
 using ZStore.Domain.Common;
-using ZStore.Application.Identity;
 using ZStore.Application;
 using ZStore.Infrastructure;
 using ZStore.Presentation;
-using ZStore.Presentation.Middleware;
+using System.Configuration;
+using ZStore.Application.Models;
+using Microsoft.IdentityModel.Logging;
 
 namespace ZStore.WebApi
 {
@@ -29,16 +26,6 @@ namespace ZStore.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHealthChecks();
-
-            services.AddControllers();
-            services.AddControllersWithViews();
-
-
-            // Add Layerss
-            services.AddApplicationLayer();
-            services.AddInfrastructureServices(Configuration);
-            services.AddPresentationServices();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -59,13 +46,6 @@ namespace ZStore.WebApi
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
 
             // Configure rather to use jwt auth or cookie auth 
             services
@@ -114,22 +94,44 @@ namespace ZStore.WebApi
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
 
-            services.AddScoped<IDbInitializer, DbInitializer>();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddHealthChecks();
+
+            services.AddControllers();
+            services.AddControllersWithViews();
+
+            // Bind JWT configuration
+            /*
+            var jwtOptions = new JwtOptions();
+            Configuration.Bind("JwtOptions", jwtOptions);
+            services.AddSingleton(jwtOptions);
+            */
+
+            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
+
+            // Add Layers
+            services.AddApplicationLayer();
+            services.AddPresentationServices();
+            services.AddInfrastructureServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseExceptionHandler(options => { });
+
 
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             } else
             {
                 app.UseExceptionHandler("/Error");
@@ -142,8 +144,6 @@ namespace ZStore.WebApi
             app.UseRouting();
 
 
-
-
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -152,9 +152,9 @@ namespace ZStore.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
                 endpoints.MapControllerRoute(name: "default", 
                     pattern: "{area=Company}/{controller=Product}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
 
             SeedDatabase(app);

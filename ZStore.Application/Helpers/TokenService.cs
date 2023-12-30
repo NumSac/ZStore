@@ -41,13 +41,12 @@ namespace ZStore.Application.Helpers
             SigningCredentials credentials,
             DateTime expiration
         ) =>
-            new(
-                "apiWithAuthBackend",
-                "apiWithAuthBackend",
-                claims,
+            new(issuer: "apiWithAuthBackend",
+                audience: "apiWithAuthBackend",
+                claims: claims,
                 expires: expiration,
                 signingCredentials: credentials
-            );
+                );
 
         public async Task<List<Claim>> CreateClaims(AccountBaseEntity user)
         {
@@ -93,7 +92,7 @@ namespace ZStore.Application.Helpers
         {
             return new SigningCredentials(
                 new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes("!mysecretforsigningplustenextrasecure")
+                    Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)
                 ),
                 SecurityAlgorithms.HmacSha256
             );

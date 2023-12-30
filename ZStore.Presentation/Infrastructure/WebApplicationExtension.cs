@@ -21,7 +21,10 @@ namespace ZStore.Presentation.Infrastructure
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var endpointGroupTypes = assembly.GetExportedTypes().Where(t => t.IsSubclassOf(endpointGroupType));
+            var endpointGroupTypes = assembly.GetExportedTypes()
+                .Where(t => t.IsSubclassOf(endpointGroupType));
+
+
 
             foreach (var type in endpointGroupTypes)
             {

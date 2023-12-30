@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using ZStore.Domain.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ZStore.Presentation.Middleware
 {
@@ -30,13 +31,17 @@ namespace ZStore.Presentation.Middleware
                     Message = err.Message,
                 };
 
-                response.StatusCode = err switch
+                switch (err)
                 {
-                    Domain.Exceptions.ApiException e => (int)HttpStatusCode.BadRequest,
-                    ValidationException e => (int)HttpStatusCode.BadRequest,
-                    KeyNotFoundException e => (int)HttpStatusCode.NotFound,
-                    _ => (int)HttpStatusCode.InternalServerError,
-                };
+                    case KeyNotFoundException e:
+                        // not found error
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        break;
+                    default:
+                        // unhandled error
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        break;
+                }
                 var result = JsonSerializer.Serialize(responseModel);
 
                 await response.WriteAsync(result);

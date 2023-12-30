@@ -1,9 +1,10 @@
 ﻿using Ardalis.GuardClauses;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using ZStore.Infrastructure.Data;
 using ZStore.Infrastructure.Identity;
+using ZStore.Infrastructure.Repository.IRepository;
+using ZStore.Infrastructure.Repository;
+using ZStore.Infrastructure.DbInitializer;
 
 namespace ZStore.Infrastructure
 {
@@ -15,6 +16,8 @@ namespace ZStore.Infrastructure
 
             Guard.Against.Null(connectionString, message: "Connection string 'Database' not found");
 
+            services.AddScoped<IDbInitializer, DbInitializer.DbInitializer>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IIdentityService, IdentityService>();
 
 
