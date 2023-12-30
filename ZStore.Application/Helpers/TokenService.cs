@@ -16,9 +16,7 @@ namespace ZStore.Application.Helpers
         private readonly JwtOptions _jwtOptions;
         private readonly UserManager<AccountBaseEntity> _userManager;
 
-        public TokenService(IOptions<JwtOptions> options, 
-            UserManager<AccountBaseEntity> userManager
-            )
+        public TokenService(IOptions<JwtOptions> options, UserManager<AccountBaseEntity> userManager)
         {
             _jwtOptions = options.Value;
             _userManager = userManager;
@@ -40,62 +38,51 @@ namespace ZStore.Application.Helpers
             List<Claim> claims,
             SigningCredentials credentials,
             DateTime expiration
-        ) =>
-            new(issuer: "apiWithAuthBackend",
-                audience: "apiWithAuthBackend",
+        ) => new JwtSecurityToken(
+                issuer: _jwtOptions.Issuer, // Ensure this is set in your JwtOptions
+                audience: _jwtOptions.Audience, // Ensure this is set in your JwtOptions
                 claims: claims,
                 expires: expiration,
                 signingCredentials: credentials
-                );
+            );
 
         public async Task<List<Claim>> CreateClaims(AccountBaseEntity user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
 
-            var roleClaims = roles.Select(role => new Claim("roles", role)).ToList();
-            try
+            var roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
+            var claims = new List<Claim>
             {
-                var claims = new List<Claim>
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(
-                        JwtRegisteredClaimNames.Iat,
-                        DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)
-                    ),
-                    // new Claim(ClaimTypes.NameIdentifier, user.Id),
-                };
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
 
-                if (!string.IsNullOrEmpty(user.UserName))
-                {
-                    claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-                }
-
-                if (!string.IsNullOrEmpty(user.Email))
-                {
-                    claims.Add(new Claim(ClaimTypes.Email, user.Email));
-                }
-                claims.AddRange(userClaims);
-                claims.AddRange(roleClaims);
-
-                return claims;
-            }
-            catch (Exception e)
+            if (!string.IsNullOrEmpty(user.UserName))
             {
-                Console.WriteLine(e);
-                throw;
+                claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             }
+
+            if (!string.IsNullOrEmpty(user.Email))
+            {
+                claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            }
+
+            claims.AddRange(userClaims);
+            claims.AddRange(roleClaims);
+
+            return claims;
         }
 
         public SigningCredentials CreateSigningCredentials()
         {
             return new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)
-                ),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),
                 SecurityAlgorithms.HmacSha256
             );
         }
     }
 }
+

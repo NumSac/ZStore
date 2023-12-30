@@ -10,7 +10,6 @@ using ZStore.Domain.Common;
 using ZStore.Application;
 using ZStore.Infrastructure;
 using ZStore.Presentation;
-using System.Configuration;
 using ZStore.Application.Models;
 using Microsoft.IdentityModel.Logging;
 
@@ -106,13 +105,7 @@ namespace ZStore.WebApi
             services.AddControllers();
             services.AddControllersWithViews();
 
-            // Bind JWT configuration
-            /*
-            var jwtOptions = new JwtOptions();
-            Configuration.Bind("JwtOptions", jwtOptions);
-            services.AddSingleton(jwtOptions);
-            */
-
+            // Provide jwt options from appsettings.json
             services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
 
             // Add Layers
@@ -131,7 +124,6 @@ namespace ZStore.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
-                IdentityModelEventSource.ShowPII = true;
             } else
             {
                 app.UseExceptionHandler("/Error");

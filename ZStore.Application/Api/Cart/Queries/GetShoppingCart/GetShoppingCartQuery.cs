@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using ZStore.Application.Interfaces;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
@@ -45,7 +44,7 @@ namespace ZStore.Application.Api.Cart.Queries.GetShoppingCart
                 await _unitOfWork.SaveAsync();
             }
 
-            var mappedShoppingCart = _mapper.Map<ShoppingCartViewModel>(query);
+            var mappedShoppingCart = _mapper.Map<ShoppingCartViewModel>(shoppingCart!.First());
 
             return new PagedResponse<ShoppingCartViewModel>(mappedShoppingCart, query.PageNumber, query.PageSize);
         }

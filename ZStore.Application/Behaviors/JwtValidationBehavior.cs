@@ -1,11 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ZStore.Application.Models;
+using ZStore.Domain.Models;
 
 namespace ZStore.Application.Behaviors
 {
@@ -25,7 +27,7 @@ namespace ZStore.Application.Behaviors
             var context = _httpContextAccessor.HttpContext;
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
-            if (token != null && ValidateAndSetUser(token, context))
+            if (token != null && ValidateAndSetUserClaims(token, context))
             {
                 // Continue to the next behavior or handler
                 return await next();
@@ -37,7 +39,7 @@ namespace ZStore.Application.Behaviors
             throw new SecurityTokenException("Invalid token");
         }
 
-        private bool ValidateAndSetUser(string token, HttpContext context)
+        private bool ValidateAndSetUserClaims(string token, HttpContext context)
         {
             try
             {
@@ -50,8 +52,8 @@ namespace ZStore.Application.Behaviors
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "apiWithAuthBackend",
-                    ValidAudience = "apiWithAuthBackend",
+                    ValidIssuer = _jwtOptions.Issuer,
+                    ValidAudience = _jwtOptions.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                 }, out SecurityToken validatedToken);
 

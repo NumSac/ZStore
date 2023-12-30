@@ -13,7 +13,7 @@ namespace ZStore.Domain.Models
         public double Price { get; set; }
         public ShoppingCart()
         {
-            ProductItems = new HashSet<ShoppingCartItem>();
+            ProductItems ??= new HashSet<ShoppingCartItem>();
         }
     }
 }
