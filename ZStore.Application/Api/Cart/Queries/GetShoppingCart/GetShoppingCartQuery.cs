@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using ZStore.Application.Helpers;
+using ZStore.Application.Interfaces;
 using ZStore.Domain.Utils;
 using ZStore.Infrastructure.Repository.IRepository;
 
@@ -14,17 +8,17 @@ namespace ZStore.Application.Api.Cart.Queries.GetShoppingCart
 {
     public partial class GetShoppingCartQuery : IRequest<PagedResponse<ShoppingCartViewModel>>
     {
-      public int PageNumber { get; set; }
-     public int PageSize { get; set; }
-    public string OwnerId { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public string OwnerId { get; set; }
     }
     public class GetShoppingCartQueryHandler : IRequestHandler<GetShoppingCartQuery, PagedResponse<ShoppingCartViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IAuthenticatedUserService _authenticatedUserService;
+        private readonly IUser _authenticatedUserService;
 
-        public GetShoppingCartQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IAuthenticatedUserService authenticatedUserService)
+        public GetShoppingCartQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IUser authenticatedUserService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -35,6 +29,7 @@ namespace ZStore.Application.Api.Cart.Queries.GetShoppingCart
         {
             var validFilter = _mapper.Map<GetShoppingCartParameter>(query);
             var userId = _authenticatedUserService.Id;
+
             if (string.IsNullOrEmpty(userId) || userId != query.OwnerId)
                 throw new UnauthorizedAccessException();
 
@@ -49,7 +44,7 @@ namespace ZStore.Application.Api.Cart.Queries.GetShoppingCart
                 await _unitOfWork.SaveAsync();
             }
 
-            var mappedShoppingCart = _mapper.Map<ShoppingCartViewModel>(query);
+            var mappedShoppingCart = _mapper.Map<ShoppingCartViewModel>(shoppingCart!.First());
 
             return new PagedResponse<ShoppingCartViewModel>(mappedShoppingCart, query.PageNumber, query.PageSize);
         }

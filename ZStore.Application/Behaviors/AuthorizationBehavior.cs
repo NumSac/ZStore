@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using System.Reflection;
 using ZStore.Application.Exceptions;
 using ZStore.Application.Interfaces;
 using ZStore.Infrastructure.Identity;
+using ZStore.Infrastructure.Security;
 
 namespace ZStore.Application.Behaviors
 {
@@ -26,6 +26,7 @@ namespace ZStore.Application.Behaviors
 
             if (authorizeAttributes.Any())
             {
+                Console.WriteLine("Passed Authorize attributes in Authorization Behavior");
                 // Must be authenticated user
                 if (_user.Id == null)
                 {

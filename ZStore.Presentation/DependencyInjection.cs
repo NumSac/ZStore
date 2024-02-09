@@ -1,11 +1,5 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using ZStore.Application.Helpers;
-using ZStore.Application.Interfaces;
-using ZStore.Infrastructure.Data;
 using ZStore.Presentation.Infrastructure;
 
 namespace ZStore.Presentation
@@ -14,8 +8,9 @@ namespace ZStore.Presentation
     {
         public static IServiceCollection AddPresentationServices(this IServiceCollection services)
         {
-            services.AddScoped<IUser, AuthenticatedUserService>();
-            //services.AddExceptionHandler<CustomExceptionHandler>();
+            services.AddExceptionHandler<CustomExceptionHandler>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddEndpointsApiExplorer();
 

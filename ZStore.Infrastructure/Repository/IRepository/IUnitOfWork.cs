@@ -14,6 +14,7 @@ namespace ZStore.Infrastructure.Repository.IRepository
         IOrderDetailRepository OrderDetail { get; }
         IOrderHeaderRepository OrderHeader { get; }
         IShoppingCartRepository ShoppingCart { get; }
+        IShoppingCartItemRepository ShoppingCartItem { get; }
 
         IDbContextTransaction BeginTransaction();
         void CommitTransaction();

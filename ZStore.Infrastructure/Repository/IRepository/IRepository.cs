@@ -33,11 +33,8 @@ namespace ZStore.Infrastructure.Repository.IRepository
         void Update(TEntity entity);
 
         void Delete(TEntity entity);
-
         Task<int> CountAsync();
-
         Task<int> CountAsync(Expression<Func<TEntity, bool>> filter);
-
         Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter);
         void DeleteRange(IEnumerable<TEntity> entities);
         void Add(TEntity entity);

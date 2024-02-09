@@ -7,6 +7,7 @@ namespace ZStore.Presentation.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public abstract class BaseApiController : ControllerBase
     {
+        // Provide Mediator in all child classes
         private IMediator _mediator;
         protected IMediator Mediator
         {

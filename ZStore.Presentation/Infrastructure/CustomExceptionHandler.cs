@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZStore.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
-using System.Web.Http.ExceptionHandling;
+using System.Text.Json;
 
 namespace ZStore.Presentation.Infrastructure
 {
@@ -24,9 +24,9 @@ namespace ZStore.Presentation.Infrastructure
         {
             var exceptionType = exception.GetType();
 
-            if (_exceptionHandlers.ContainsKey(exceptionType))
+            if (_exceptionHandlers.TryGetValue(exceptionType, out Func<HttpContext, Exception, Task>? value))
             {
-                await _exceptionHandlers[exceptionType].Invoke(httpContext, exception);
+                await value.Invoke(httpContext, exception);
                 return true;
             }
 
@@ -83,11 +83,6 @@ namespace ZStore.Presentation.Infrastructure
                 Title = "Forbidden",
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
             });
-        }
-
-        public Task HandleAsync(ExceptionHandlerContext context, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
         }
     }
 }

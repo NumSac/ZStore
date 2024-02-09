@@ -23,6 +23,10 @@ namespace ZStore.Domain.Models
         [Required]
         public string VatNumber { get; set; } = string.Empty;
         public CompanyProfile? Profile { get; set; }
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+        public virtual ICollection<Product> Products { get; set; }
+        public Company() 
+        {
+            Products = new HashSet<Product>();
+        }
     }
 }
